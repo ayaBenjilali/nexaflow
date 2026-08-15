@@ -1,0 +1,15 @@
+node_modules
+dist
+coverage
+.env
+.env.*
+!.env.example
+npm-debug.log*
+*.tsbuildinfo
+.DS_Store
+android/.gradle
+android/app/build
+ios/App/Pods
+ios/App/build
+
+.vercel

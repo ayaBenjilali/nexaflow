@@ -1,0 +1,15 @@
+{
+  "buildCommand": "npm run build -w @nexaflow/server && npm run build -w @nexaflow/web",
+  "outputDirectory": "apps/web/dist",
+  "installCommand": "npm install",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/[...path]"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
