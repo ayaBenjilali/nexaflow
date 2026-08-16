@@ -1,8 +1,6 @@
 node_modules
 dist
 coverage
-.env
-.env.*
 !.env.example
 npm-debug.log*
 *.tsbuildinfo
@@ -13,3 +11,4 @@ ios/App/Pods
 ios/App/build
 
 .vercel
+config.bat
