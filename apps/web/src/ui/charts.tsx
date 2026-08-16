@@ -1,0 +1,3 @@
+import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+export const MoneyLine = ({ data }: { data: any[] }) => <ResponsiveContainer width="100%" height={260}><LineChart data={data}><CartesianGrid strokeDasharray="3 3"/><XAxis dataKey="month"/><YAxis/><Tooltip/><Line type="monotone" dataKey="revenue" stroke="#0f766e" strokeWidth={3}/></LineChart></ResponsiveContainer>;
+export const SimpleBars = ({ data }: { data: any[] }) => <ResponsiveContainer width="100%" height={240}><BarChart data={data}><CartesianGrid strokeDasharray="3 3"/><XAxis dataKey="name"/><YAxis allowDecimals={false}/><Tooltip/><Bar dataKey="value" fill="#2dd4bf" radius={[6,6,0,0]}/></BarChart></ResponsiveContainer>;
