@@ -1,0 +1,34 @@
+import bcrypt from "bcryptjs";
+import type { DealStage, LeadStatus, Priority, Role, TaskStatus } from "@nexaflow/shared";
+
+const id = (prefix: string, i: number) => `${prefix}_${String(i).padStart(3, "0")}`;
+export type DemoUser = { id: string; name: string; email: string; passwordHash: string; role: Role; title: string; avatar: string };
+export type Customer = { id: string; name: string; company: string; email: string; phone: string; status: "ACTIVE" | "ARCHIVED"; segment: string; value: number; ownerId: string; createdAt: string };
+export type Lead = { id: string; name: string; company: string; email: string; phone: string; source: string; status: LeadStatus; assignedUserId: string; estimatedValue: number; notes: string; createdAt: string };
+export type Deal = { id: string; customerId: string; title: string; value: number; stage: DealStage; probability: number; expectedCloseDate: string; ownerId: string };
+export type Project = { id: string; name: string; clientId: string; status: "PLANNING" | "ACTIVE" | "AT_RISK" | "COMPLETED"; progress: number; startDate: string; deadline: string; teamMemberIds: string[] };
+export type Task = { id: string; title: string; description: string; status: TaskStatus; priority: Priority; assigneeId: string; projectId: string; dueDate: string };
+export type Activity = { id: string; type: string; actorId: string; message: string; createdAt: string };
+export type Notification = { id: string; userId: string; title: string; body: string; read: boolean; createdAt: string };
+
+const names = ["Avery Stone","Maya Patel","Noah Bennett","Lena Ortiz","Ethan Shaw","Priya Nair","Owen Brooks","Clara Hughes","Mateo Rivera","Iris Chen","Miles Cooper","Zara Khan","Julian Reed","Amara Lewis","Theo Carter","Nina Park","Kai Morgan","Sofia Rossi","Elliot Gray","Layla Adams","Rowan Price","Hana Kim","Caleb Fox","Mila Torres","Aria Singh","Jon Bell","Tessa Grant","Omar Haddad","June Fisher","Ravi Mehta","Sana Ali","Felix Ward"];
+const companies = ["Brightline Studio","Northstar Dental","Evergreen Legal","Atlas Homes","Peak Fitness","Lumen Labs","Orbit Supply","Harbor Foods","Cobalt Creative","Summit HR","Fable Events","Cedar Finance","Juniper Health","Vantage Solar","Bluebird Travel","Acme Robotics","Urban Nest","Kinetic Media","Foundry Works","Clearwater SaaS","Aster Retail","Bridgeway Consulting","Pioneer Logistics","Redwood Agency","Mosaic Care","Noble Kitchens","Spark Learning","Terra Accounting","Horizon Clinics","Pulse Security"];
+const today = new Date("2026-08-14T10:00:00.000Z");
+const daysAgo = (n: number) => new Date(today.getTime() - n * 86400000).toISOString();
+const daysAhead = (n: number) => new Date(today.getTime() + n * 86400000).toISOString().slice(0, 10);
+
+export const company = { id: "company_001", name: "NexaFlow Demo Co.", domain: "nexaflow.demo", plan: "Scale" };
+export const users: DemoUser[] = [
+  { id: "user_admin", name: "Jordan Ellis", email: "admin@nexaflow.demo", role: "ADMIN", title: "Operations Director", avatar: "JE", passwordHash: "" },
+  { id: "user_manager", name: "Morgan Lee", email: "manager@nexaflow.demo", role: "MANAGER", title: "Client Services Manager", avatar: "ML", passwordHash: "" },
+  { id: "user_member", name: "Casey Brooks", email: "member@nexaflow.demo", role: "TEAM_MEMBER", title: "Delivery Specialist", avatar: "CB", passwordHash: "" },
+  { id: "user_sam", name: "Sam Rivera", email: "sam@nexaflow.demo", role: "TEAM_MEMBER", title: "Account Coordinator", avatar: "SR", passwordHash: "" }
+];
+export const customers: Customer[] = companies.map((company, i) => ({ id: id("cust", i + 1), name: names[i % names.length], company, email: `hello@${company.toLowerCase().replaceAll(" ", "").replaceAll(".", "")}.com`, phone: `+1 415 555 ${String(1100 + i)}`, status: i % 13 === 0 ? "ARCHIVED" : "ACTIVE", segment: ["Agency","Healthcare","Professional Services","Retail"][i % 4], value: 12000 + i * 1850, ownerId: users[i % users.length].id, createdAt: daysAgo(i * 3 + 2) }));
+export const leads: Lead[] = Array.from({ length: 34 }, (_, i) => ({ id: id("lead", i + 1), name: names[(i + 7) % names.length], company: companies[(i + 5) % companies.length], email: `lead${i + 1}@example.com`, phone: `+1 212 555 ${String(2100 + i)}`, source: ["Referral","LinkedIn","Webinar","Website","Partner"][i % 5], status: (["NEW","CONTACTED","QUALIFIED","UNQUALIFIED","CONVERTED"] as LeadStatus[])[i % 5], assignedUserId: users[(i + 1) % users.length].id, estimatedValue: 5000 + i * 1250, notes: "Interested in consolidating client work, sales follow-up, and project delivery.", createdAt: daysAgo(i + 1) }));
+export const deals: Deal[] = Array.from({ length: 24 }, (_, i) => ({ id: id("deal", i + 1), customerId: customers[i % customers.length].id, title: `${companies[i % companies.length]} growth workspace`, value: 9000 + i * 3200, stage: (["NEW","QUALIFIED","PROPOSAL","NEGOTIATION","WON","LOST"] as DealStage[])[i % 6], probability: [15,35,55,75,100,0][i % 6], expectedCloseDate: daysAhead(7 + i * 2), ownerId: users[i % users.length].id }));
+export const projects: Project[] = Array.from({ length: 12 }, (_, i) => ({ id: id("proj", i + 1), name: ["Client portal rollout","Sales ops migration","Retention dashboard","Campaign command center"][i % 4] + ` ${i + 1}`, clientId: customers[i % customers.length].id, status: (["PLANNING","ACTIVE","AT_RISK","COMPLETED"] as const)[i % 4], progress: [18,42,66,100][i % 4], startDate: daysAgo(40 - i), deadline: daysAhead(14 + i * 4), teamMemberIds: users.slice(1).map((u) => u.id) }));
+export const tasks: Task[] = Array.from({ length: 60 }, (_, i) => ({ id: id("task", i + 1), title: ["Map client journey","Design approval flow","Import account records","QA mobile forms","Prepare launch report"][i % 5], description: "Concrete delivery work tied to a client milestone.", status: (["TODO","IN_PROGRESS","REVIEW","COMPLETED"] as TaskStatus[])[i % 4], priority: (["LOW","MEDIUM","HIGH","URGENT"] as Priority[])[i % 4], assigneeId: users[(i % 3) + 1].id, projectId: projects[i % projects.length].id, dueDate: daysAhead((i % 18) + 1) }));
+export const activities: Activity[] = Array.from({ length: 28 }, (_, i) => ({ id: id("act", i + 1), type: ["deal","task","lead","customer"][i % 4], actorId: users[i % users.length].id, message: ["moved a deal to proposal","completed a delivery task","qualified a new lead","updated a customer profile"][i % 4], createdAt: daysAgo(i) }));
+export const notifications: Notification[] = Array.from({ length: 16 }, (_, i) => ({ id: id("note", i + 1), userId: users[i % users.length].id, title: ["Deal needs review","Task due soon","New lead assigned","Project risk changed"][i % 4], body: "Open NexaFlow to review the latest business update.", read: i % 3 === 0, createdAt: daysAgo(i) }));
+export const initializePasswords = async () => { const hash = await bcrypt.hash("NexaFlowDemo!2026", 10); users.forEach((u) => { u.passwordHash = hash; }); };
