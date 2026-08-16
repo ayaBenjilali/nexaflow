@@ -1,0 +1,12 @@
+export const roles = ["ADMIN", "MANAGER", "TEAM_MEMBER"] as const;
+export type Role = (typeof roles)[number];
+export const leadStatuses = ["NEW", "CONTACTED", "QUALIFIED", "UNQUALIFIED", "CONVERTED"] as const;
+export const dealStages = ["NEW", "QUALIFIED", "PROPOSAL", "NEGOTIATION", "WON", "LOST"] as const;
+export const taskStatuses = ["TODO", "IN_PROGRESS", "REVIEW", "COMPLETED"] as const;
+export const priorities = ["LOW", "MEDIUM", "HIGH", "URGENT"] as const;
+export type LeadStatus = (typeof leadStatuses)[number];
+export type DealStage = (typeof dealStages)[number];
+export type TaskStatus = (typeof taskStatuses)[number];
+export type Priority = (typeof priorities)[number];
+export type ApiResponse<T> = { success: true; data: T; meta?: Record<string, unknown> } | { success: false; error: { message: string; code?: string; details?: unknown } };
+export type UserDTO = { id: string; name: string; email: string; role: Role; avatar?: string; title?: string };
