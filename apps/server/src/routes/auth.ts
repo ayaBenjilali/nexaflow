@@ -1,0 +1,12 @@
+import { Router } from "express";
+import { authRepo } from "../repositories/demoRepository.js";
+import { requireAuth, signToken } from "../middleware/auth.js";
+import { created, ok } from "../utils/http.js";
+import { loginSchema, registerSchema } from "../validators/common.js";
+const router = Router();
+const publicUser = ({ passwordHash: _passwordHash, ...user }: any) => user;
+router.post("/register", async (req, res, next) => { try { const user = await authRepo.register(registerSchema.parse(req.body)); created(res, { user: publicUser(user), token: signToken(user) }); } catch (error) { next(error); } });
+router.post("/login", async (req, res, next) => { try { const credentials = loginSchema.parse(req.body); const user = await authRepo.login(credentials.email, credentials.password); ok(res, { user: publicUser(user), token: signToken(user) }); } catch (error) { next(error); } });
+router.post("/logout", (_req, res) => ok(res, { message: "Logged out" }));
+router.get("/me", requireAuth, (req, res) => ok(res, { user: req.user }));
+export default router;
