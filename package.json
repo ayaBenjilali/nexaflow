@@ -4,9 +4,12 @@
   "private": true,
   "type": "module",
   "description": "Production-quality MERN SaaS CRM and project management platform with React, Node.js, Express, MongoDB, TypeScript and Capacitor.",
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "concurrently -n server,web -c cyan,magenta \"npm:dev -w @nexaflow/server\" \"npm:dev -w @nexaflow/web\"",
+    "dev": "node api.js && concurrently -n server,web -c cyan,magenta \"npm:dev -w @nexaflow/server\" \"npm:dev -w @nexaflow/web\"",
     "build": "npm run build -ws --if-present",
     "typecheck": "npm run typecheck -ws --if-present",
     "lint": "npm run lint -ws --if-present",
